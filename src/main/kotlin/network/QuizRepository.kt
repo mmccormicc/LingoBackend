@@ -7,12 +7,14 @@ class QuizRepository(private val dataSource: DataSource) {
 
     fun submitDeviceId(deviceId: String): Boolean {
         dataSource.connection.use { conn ->
+            // Statement to insert device_id into devices
+            // If device already exists just keep it the same
             val stmt = conn.prepareStatement("""
                 INSERT INTO devices (device_id, role) 
                 VALUES (?, 'user') 
-                ON DUPLICATE KEY UPDATE device_id = VALUES(device_id)
             """)
             println("Submit Device ID:" + deviceId)
+            // Assigning value for device_id
             stmt.setString(1, deviceId)
             return stmt.executeUpdate() > 0
         }
@@ -20,13 +22,18 @@ class QuizRepository(private val dataSource: DataSource) {
 
     fun submitScore(score: QuizScore): Boolean {
         dataSource.connection.use { conn ->
+
+            // SQL statement to insert new score into quiz table.
+            // If entry with same device_id, language, and quiz_name already exists, only update if new score is greater
             val stmt = conn.prepareStatement("""
                 INSERT INTO quiz_scores (device_id, language, quiz_name, score)
                 VALUES (?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE score = VALUES(score)
+                ON DUPLICATE KEY 
+                UPDATE score = IF(VALUES(score) > score, VALUES(score), score)
             """)
             println(score.deviceId)
             println(score.toString())
+            // Assigning values to sql statement
             stmt.setString(1, score.deviceId)
             stmt.setString(2, score.language)
             stmt.setString(3, score.quizName)
