@@ -12,6 +12,7 @@ class QuizRepository(private val dataSource: DataSource) {
                 VALUES (?, 'user') 
                 ON DUPLICATE KEY UPDATE device_id = VALUES(device_id)
             """)
+            println("Submit Device ID:" + deviceId)
             stmt.setString(1, deviceId)
             return stmt.executeUpdate() > 0
         }
