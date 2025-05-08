@@ -33,6 +33,7 @@ fun Application.configureRouting(repository: QuizRepository) {
             val quizName = call.request.queryParameters["quizName"] ?: return@get call.respondText("Missing quizName", status = io.ktor.http.HttpStatusCode.BadRequest)
 
             val score = repository.getScore(deviceId, language, quizName)
+
             if (score != null) {
                 call.respond(score)
             } else {
