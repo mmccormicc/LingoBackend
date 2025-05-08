@@ -16,7 +16,9 @@ fun Application.configureRouting(repository: QuizRepository) {
         }
 
         post("/deviceid") {
-            val deviceid = call.receive<String>()
+            var deviceid = call.receive<String>()
+            // Removing quotes that are added in transit
+            deviceid = deviceid.replace("\"", "")
             val success = repository.submitDeviceId(deviceid)
             call.respond(mapOf("success" to success))
         }
