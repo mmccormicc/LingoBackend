@@ -24,6 +24,8 @@ class QuizRepository(private val dataSource: DataSource) {
                 VALUES (?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE score = VALUES(score)
             """)
+            println(score.deviceId)
+            println(score.toString())
             stmt.setString(1, score.deviceId)
             stmt.setString(2, score.language)
             stmt.setString(3, score.quizName)
