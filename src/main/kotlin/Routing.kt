@@ -15,7 +15,13 @@ fun Application.configureRouting(repository: QuizRepository) {
             call.respondText("Hello World!")
         }
 
-        post("/submit") {
+        post("/deviceid") {
+            val deviceid = call.receive<String>()
+            val success = repository.submitDeviceId(deviceid)
+            call.respond(mapOf("success" to success))
+        }
+
+        post("/score") {
             val score = call.receive<QuizScore>()
             val success = repository.submitScore(score)
             call.respond(mapOf("success" to success))

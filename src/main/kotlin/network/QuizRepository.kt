@@ -5,6 +5,18 @@ import javax.sql.DataSource
 
 class QuizRepository(private val dataSource: DataSource) {
 
+    fun submitDeviceId(deviceId: String): Boolean {
+        dataSource.connection.use { conn ->
+            val stmt = conn.prepareStatement("""
+                INSERT INTO devices (device_id, role) 
+                VALUES (?, 'user') 
+                ON DUPLICATE KEY UPDATE device_id = VALUES(device_id)
+            """)
+            stmt.setString(1, deviceId)
+            return stmt.executeUpdate() > 0
+        }
+    }
+
     fun submitScore(score: QuizScore): Boolean {
         dataSource.connection.use { conn ->
             val stmt = conn.prepareStatement("""
