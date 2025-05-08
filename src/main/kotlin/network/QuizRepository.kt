@@ -8,10 +8,11 @@ class QuizRepository(private val dataSource: DataSource) {
     fun submitDeviceId(deviceId: String): Boolean {
         dataSource.connection.use { conn ->
             // Statement to insert device_id into devices
-            // If device already exists just keep it the same
+            // If device already exists just keep it the same. This is needed to prevent a crash.
             val stmt = conn.prepareStatement("""
                 INSERT INTO devices (device_id, role) 
                 VALUES (?, 'user') 
+                ON DUPLICATE KEY UPDATE device_id = VALUES(device_id)
             """)
             println("Submit Device ID:" + deviceId)
             // Assigning value for device_id
