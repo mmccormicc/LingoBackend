@@ -7,13 +7,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureSerialization() {
+    // Using Gson for deserialization
     install(ContentNegotiation) {
         gson {
-            }
-    }
-    routing {
-        get("/json/gson") {
-                call.respond(mapOf("hello" to "world"))
             }
     }
 }

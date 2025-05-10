@@ -10,9 +10,10 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+
     configureSerialization()
 
-
+    // Configuring connection to MySQL database
     val config = HikariConfig().apply {
         jdbcUrl = System.getenv("JDBC_DATABASE_URL") ?: "jdbc:mysql://metro.proxy.rlwy.net:13333/railway"
         username = System.getenv("DB_USER") ?: "root"
@@ -20,8 +21,12 @@ fun Application.module() {
         driverClassName = "com.mysql.cj.jdbc.Driver"
     }
 
+    // Creating data source from configuration
     val dataSource = HikariDataSource(config)
+
+    // Creating repository given dataSource
     val repository = QuizRepository(dataSource)
 
+    // Configuring routes
     configureRouting(repository)
 }
