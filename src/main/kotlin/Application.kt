@@ -15,9 +15,9 @@ fun Application.module() {
 
     // Configuring connection to MySQL database
     val config = HikariConfig().apply {
-        jdbcUrl = System.getenv("JDBC_DATABASE_URL") ?: "jdbc:mysql://metro.proxy.rlwy.net:13333/railway"
-        username = System.getenv("DB_USER") ?: "root"
-        password = System.getenv("DB_PASSWORD") ?: "errorpassword"
+        jdbcUrl = System.getenv("JDBC_DATABASE_URL") ?: "error_url"
+        username = System.getenv("DB_USER") ?: "error_user"
+        password = System.getenv("DB_PASSWORD") ?: "error_password"
         driverClassName = "com.mysql.cj.jdbc.Driver"
     }
 
